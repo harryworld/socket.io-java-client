@@ -740,7 +740,8 @@ class IOConnection implements IOCallback {
 			}
 			if (message.getData().endsWith("+0")) {
 				// We are advised to disconnect
-				cleanup();
+	            handshake();
+//				cleanup();
 			}
 			break;
 		case IOMessage.TYPE_NOOP:
