@@ -25,6 +25,8 @@ public interface IOCallback {
 	 */
 	void onConnect();
 	
+	void onReonnecting();
+	
 	/**
 	 * On message. Called when the server sends String data.
 	 *
@@ -56,4 +58,7 @@ public interface IOCallback {
 	 * @param socketIOException the last exception describing the error
 	 */
 	void onError(SocketIOException socketIOException);
+	
+	
+	
 }
