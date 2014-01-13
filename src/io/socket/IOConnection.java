@@ -555,9 +555,8 @@ class IOConnection implements IOCallback {
 	 */
 	public void transportDisconnected() {
 		this.lastException = null;
-//		setState(STATE_INTERRUPTED);
+		setState(STATE_INTERRUPTED);
 //		reconnect();
-		setState(STATE_INVALID);
 		onDisconnect();
 	}
 
@@ -571,7 +570,6 @@ class IOConnection implements IOCallback {
 	public void transportError(Exception error) {
 		this.lastException = error;
 		setState(STATE_INTERRUPTED);
-//		setState(STATE_INVALID);
 //		reconnect();
 		onError(new SocketIOException(error.getMessage()));
 	}
@@ -771,17 +769,22 @@ class IOConnection implements IOCallback {
 			try{
 				
 				invalidateTransport();
-				setState(STATE_INTERRUPTED);
+//				setState(STATE_INIT);
+//				if (IOConnection.this.getState() == STATE_INIT)
+//					handshake();
+				setState(STATE_INIT);
+				handshake();
 				connectTransport();
-//				
-//				if (!keepAliveInQueue) {
+				
+				if (!keepAliveInQueue) {
 					sendPlain("2::");
 					keepAliveInQueue = true;
-//				}
+				}
 			}catch(Exception ex) {
 				ex.printStackTrace();
 				handshake();
 			}
+			
 			
 //		}
 	}
