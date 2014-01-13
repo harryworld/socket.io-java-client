@@ -556,7 +556,8 @@ class IOConnection implements IOCallback {
 	public void transportDisconnected() {
 		this.lastException = null;
 		setState(STATE_INTERRUPTED);
-		reconnect();
+//		reconnect();
+		onDisconnect();
 	}
 
 	/**
@@ -569,7 +570,8 @@ class IOConnection implements IOCallback {
 	public void transportError(Exception error) {
 		this.lastException = error;
 		setState(STATE_INTERRUPTED);
-		reconnect();
+//		reconnect();
+		onError(new SocketIOException(error.getMessage()));
 	}
 
 	/**
@@ -757,15 +759,34 @@ class IOConnection implements IOCallback {
 	 * do not shut down TCP-connections when switching from HSDPA to Wifi
 	 */
 	public synchronized void reconnect() {
-		if (getState() != STATE_INVALID) {
-			invalidateTransport();
-			setState(STATE_INTERRUPTED);
-			if (reconnectTask != null) {
-				reconnectTask.cancel();
+//		onReonnecting();
+//		if (getState() != STATE_INVALID) {
+//			if (reconnectTask != null) {
+//				reconnectTask.cancel();
+//			}
+//			reconnectTask = new ReconnectTask();
+//			backgroundTimer.schedule(reconnectTask, 1000,5000);
+			try{
+				
+				invalidateTransport();
+//				setState(STATE_INIT);
+//				if (IOConnection.this.getState() == STATE_INIT)
+//					handshake();
+				setState(STATE_INIT);
+				handshake();
+				connectTransport();
+				
+				if (!keepAliveInQueue) {
+					sendPlain("2::");
+					keepAliveInQueue = true;
+				}
+			}catch(Exception ex) {
+				ex.printStackTrace();
+				handshake();
 			}
-			reconnectTask = new ReconnectTask();
-			backgroundTimer.schedule(reconnectTask, 1000);
-		}
+			
+			
+//		}
 	}
 
 	/**
@@ -914,4 +935,12 @@ class IOConnection implements IOCallback {
 		for (SocketIO socket : sockets.values())
 			socket.getCallback().onError(socketIOException);
 	}
+
+	@Override
+	public void onReonnecting() {
+		// TODO Auto-generated method stub
+		for (SocketIO socket : sockets.values())
+			socket.getCallback().onReonnecting();
+	}
+
 }
