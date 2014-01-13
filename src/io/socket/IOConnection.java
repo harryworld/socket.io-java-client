@@ -445,7 +445,8 @@ class IOConnection implements IOCallback {
 		for (SocketIO socket : sockets.values()) {
 			socket.getCallback().onError(e);
 		}
-		cleanup();
+//		cleanup();
+		handshake();
 	}
 
 	/**
