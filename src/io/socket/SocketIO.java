@@ -236,6 +236,11 @@ public class SocketIO {
 	public void emit(final String event, final Object... args) {
 		this.connection.emit(this, event, null, args);
 	}
+	
+	
+	public void handshake() {
+		this.connection.handshake();
+	}
 
 	/**
 	 * Emits an event to the Socket.IO server. If the connection is not

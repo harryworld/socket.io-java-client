@@ -289,7 +289,7 @@ class IOConnection implements IOCallback {
 	 * Handshake.
 	 * 
 	 */
-	private void handshake() {
+	void handshake() {
 		URL url;
 		String response;
 		URLConnection connection;
@@ -446,7 +446,7 @@ class IOConnection implements IOCallback {
 			socket.getCallback().onError(e);
 		}
 //		cleanup();
-		handshake();
+//		handshake();
 	}
 
 	/**
